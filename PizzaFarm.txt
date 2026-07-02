@@ -11,7 +11,7 @@ Tab:AddToggle({
 	Name = "Cashier",
 	Default = false,
 	Callback = function(Value)
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Vinizin13/teste/refs/heads/main/cashier.txt"))()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/Vinizin13/teste/refs/heads/main/cashier.txt"))()
 	end    
 })
 Tab:AddToggle({
