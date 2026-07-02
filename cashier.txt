@@ -57,7 +57,3 @@ function TeleportarFlutuando(player)
         humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping, true)
     end
 end
-
--- Como usar (local player):
-local player = Players.LocalPlayer
-TeleportarFlutuando(player)
