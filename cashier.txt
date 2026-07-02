@@ -1,0 +1,63 @@
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+function TeleportarFlutuando(player)
+    local character = player.Character
+    if not character or not character.PrimaryPart then return end
+    
+    local humanoid = character:FindFirstChild("Humanoid")
+    local rootPart = character.PrimaryPart
+    local targetPos = Vector3.new(49, 4, 83)
+    
+    -- Ativa NoClip (atravessa paredes)
+    for _, part in ipairs(character:GetDescendants()) do
+        if part:IsA("BasePart") then
+            part.CanCollide = false
+        end
+    end
+    
+    -- Efeito de flutuação (gravidade zero e slow fall)
+    if humanoid then
+        humanoid.PlatformStand = true  -- Desativa física normal
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false)
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping, false)
+        
+        -- Aplica flutuação gradual
+        local tween = game:GetService("TweenService"):Create(
+            humanoid,
+            TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+            { WalkSpeed = 5 }  -- Movimento lento
+        )
+        tween:Play()
+    end
+    
+    -- Teleporta suavemente (flutuando)
+    local tweenService = game:GetService("TweenService")
+    local tweenInfo = TweenInfo.new(2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    local tween = tweenService:Create(rootPart, tweenInfo, { Position = targetPos })
+    tween:Play()
+    
+    -- Aguarda chegada e restaura
+    tween.Completed:Wait()
+    
+    -- Restaura após 3 segundos
+    task.wait(3)
+    
+    -- Remove NoClip
+    for _, part in ipairs(character:GetDescendants()) do
+        if part:IsA("BasePart") then
+            part.CanCollide = true
+        end
+    end
+    
+    -- Restaura física
+    if humanoid then
+        humanoid.PlatformStand = false
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, true)
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping, true)
+    end
+end
+
+-- Como usar (local player):
+local player = Players.LocalPlayer
+TeleportarFlutuando(player)
